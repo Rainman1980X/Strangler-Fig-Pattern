@@ -1,25 +1,30 @@
 package de.burgerit;
 
-import de.burgerit.myclass.MyClass;
-import de.burgerit.myclass.context.MyClassContext;
-import de.burgerit.myclass.context.MyClassContextFactory;
+import de.burgerit.application.services.Methode1_5_Service;
+import de.burgerit.domain.domain1.Methode1Entity;
+import de.burgerit.domain.domain1.Methode2Entity;
+import de.burgerit.legacy.myclass.MyClass;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+@Slf4j
 public class Main {
 
     public static void main(String[] args) {
+        log.info("Start Main");
+        var annotationConfigApplicationContext = new AnnotationConfigApplicationContext("de.burgerit");
 
-        MyClassContext context = MyClassContextFactory.createApplicationContext("production",
-                10,
-                "jdbc:mysql://production-db:3306/myapp");
+        log.info("New calls from Spring");
 
-        MyClass myClass = (MyClass) context.getInstance("legacyClass");
-        myClass.method1("ConfigSet");
+        var methode15Service = annotationConfigApplicationContext.getBean(Methode1_5_Service.class);
 
-        if(myClass.method2("String1","String2")){
-            System.out.println("Method 2 executed from Main");
-        } else {
-            System.out.println("Method 2 'not' executed from Main");
-        }
+        methode15Service.methode1(new Methode1Entity("ConfigSet"));
+        var result = methode15Service.method2(new Methode2Entity("String1", "String2"));
+        log.info("Method 2 result: {}", result);
+
+        log.info("Legacy calls");
+        MyClass myClass = new MyClass("Config", 10, "DatabaseUrl");
+
 
         myClass.method3();
         myClass.method4();
@@ -29,6 +34,8 @@ public class Main {
         myClass.method8();
         myClass.method9();
         myClass.method10();
+
+        log.info("End Main");
 
     }
 }

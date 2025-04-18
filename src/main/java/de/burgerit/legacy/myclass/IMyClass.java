@@ -1,9 +1,11 @@
-package de.burgerit.myclass;
+package de.burgerit.legacy.myclass;
 
 public interface IMyClass {
 
+    @Deprecated(forRemoval = true)
     void method1(String configNew);
 
+    @Deprecated(forRemoval = true)
     boolean method2(String param1, String param2);
 
     void method3();

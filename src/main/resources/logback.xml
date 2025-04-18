@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- 1️⃣  Pattern‑Layout -->
+    <property name="PATTERN"
+              value="%d{HH:mm:ss.SSS} %-5level [%thread] %logger{36} – %msg%n"/>
+
+    <!-- 2️⃣  Console‑Appender -->
+    <appender name="STDOUT"
+              class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 3️⃣  Rolling‑File‑Appender (optional) -->
+    <appender name="FILE"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/app.log</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/app.%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>${PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 4️⃣  Wurzel‑Logger + Paket‑Spezielles -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+    </root>
+
+    <!--   Alles unter de.burgerit.domain detaillierter loggen -->
+    <logger name="de.burgerit.domain" level="DEBUG"/>
+</configuration>
